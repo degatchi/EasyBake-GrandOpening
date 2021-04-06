@@ -1,11 +1,13 @@
 import './App.css';
-import Navbar from './components/Navbar/Navbar.js'
+import Footer from './components/footer/Footer.js'
 
 
 const App = () => {
   return (
-    <div className="App">
-      <Navbar title="EasyBake Grand Opening!"/>
+    <div className="page-container">
+      <div className="content-wrap">        
+      </div>
+      <Footer />
     </div>
   );
 }
