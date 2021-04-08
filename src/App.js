@@ -7,12 +7,11 @@ import './App.css';
 
 const App = () => {
   const [web3, setWeb3] = useState(undefined)
-  const [accounts, setAccounts] = useState(undefined)
+  const [account, setAccount] = useState(undefined)
   const [balance, setBalance] = useState(undefined)
   const [ovenContract, setOvenContract] = useState(undefined)
   const [sugarBarContract, setSugarBarContract] = useState(undefined)
-  const [MasterChefContract, setMasterChefContract] = useState(undefined)
-
+  const [masterChefContract, setMasterChefContract] = useState(undefined)
 
   
   useEffect(() => {
@@ -25,12 +24,22 @@ const App = () => {
         // load balance
         if(typeof accounts[0] !== 'undefined') {
           const balance = await web3.eth.getBalance(accounts[0])
-          setAccounts(accounts[0])
+          setAccount(accounts[0])
           setBalance(balance)
           setWeb3(web3)
         } else {
           window.alert('Please login with Metamask')
         }
+
+        // sets contracts
+        try {
+          setOvenContract(new web3.eth.Contract(OvenToken.abi, OvenToken.networks[netId].address))
+          setSugarBarContract(new web3.eth.Contract(SugarBar.abi, SugarBar.networks[netId].address))
+          setMasterChefContract(new web3.eth.Contract(MasterChef.abi, MasterChef.networks[netId].address))
+        } catch (e) {
+          window.alert("Contracts not deployed to the current network")
+        }
+
       } else {
         window.alert('Please install Metamask')
       }
@@ -41,8 +50,9 @@ const App = () => {
   return (
     <div className="page-container">
       <div className="content-wrap">
-      <Header />
-        
+        <Header />
+        <h1>Welcome to EasyBake, {account}</h1>
+        <h2>Current ether balance: {balance}</h2>
       </div>
       <Footer />
     </div>
