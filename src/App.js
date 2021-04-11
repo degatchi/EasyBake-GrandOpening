@@ -52,14 +52,14 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
   // deposit to ETH-DAI pool
   const depositETHDAI = async (amount) => {
     await MasterChef.methods
-      .deposit('0x1c5dee94a34d795f9eeef830b68b80e44868d316', amount.toString())
+      .deposit('2', amount.toString())
       .send({ from: account });
   };
 
   // withdraw from ETH-DAI pool
   const withdrawETHDAI = async (amount) => {
     await MasterChef.methods
-      .withdraw('0x1c5dee94a34d795f9eeef830b68b80e44868d316', amount.toString())
+      .withdraw('2', amount.toString())
       .send({ from: account });
   };
 
