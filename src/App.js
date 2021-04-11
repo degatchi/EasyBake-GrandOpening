@@ -93,8 +93,12 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
     <div className='page-container'>
       <div className='content-wrap'>
         <Header />
-        <h3>Welcome to EasyBake, {account}</h3>
-        <h4>Current ether balance: {balance}</h4>
+        <h3>
+          <strong>Welcome to EasyBake,</strong> <em>{account}</em>
+        </h3>
+        <h4>
+          <strong>Your current Ether balance is,</strong> <em>{balance}</em>
+        </h4>
         <hr />
         <p> Please enter amount to deposit to ETH-DAI pool: </p>
         <form
@@ -118,6 +122,7 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
             />
           </div>
         </form>
+        <br />
         <p> Please enter amount to withdraw from ETH-DAI pool: </p>
         <form
           onSubmit={(e) => {
@@ -141,6 +146,7 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
             />
           </div>
         </form>
+        <br />
         <form
           onSubmit={(e) => {
             e.preventDefault(); // prevents page refresh
