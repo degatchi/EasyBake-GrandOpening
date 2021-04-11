@@ -16,15 +16,27 @@ const Footer = () => {
           <div className='col'>
             <h4>Socials</h4>
             <ui className='list-unstyled'>
-              <a href='https://twitter.com/EasyBakeSwap' target='_blank'>
+              <a
+                href='https://twitter.com/EasyBakeSwap'
+                target='_blank'
+                rel='noreferrer'
+              >
                 Twitter
               </a>
               <br />
-              <a href='https://t.me/EasyBakeSwap' target='_blank'>
+              <a
+                href='https://t.me/EasyBakeSwap'
+                target='_blank'
+                rel='noreferrer'
+              >
                 Telegram
               </a>
               <br />
-              <a href='https://github.com/EasybakeSwap' target='_blank'>
+              <a
+                href='https://github.com/EasybakeSwap'
+                target='_blank'
+                rel='noreferrer'
+              >
                 Github
               </a>
             </ui>
@@ -36,6 +48,7 @@ const Footer = () => {
               <a
                 href='https://ropsten.etherscan.io/address/0x1acb479bb9d1f73009f85ef5f495e942bb57f15a'
                 target='_blank'
+                rel='noreferrer'
               >
                 OvenToken.sol
               </a>
@@ -43,6 +56,7 @@ const Footer = () => {
               <a
                 href='https://ropsten.etherscan.io/address/0x11058ea62665ac8ab5cae5a2abc97e5451ace604#code'
                 target='_blank'
+                rel='noreferrer'
               >
                 SugarBar.sol
               </a>
@@ -50,6 +64,7 @@ const Footer = () => {
               <a
                 href='https://ropsten.etherscan.io/address/0xc6deeacf599d97761cd03ce0aac45964daebc234#code'
                 target='_blank'
+                rel='noreferrer'
               >
                 MasterChef.sol
               </a>
@@ -60,7 +75,11 @@ const Footer = () => {
         <div className='row'>
           <p className='col-sm'>
             &copy;{new Date().getFullYear()}{' '}
-            <a href='https://easybake.finance/' target='_blank'>
+            <a
+              href='https://easybake.finance/'
+              target='_blank'
+              rel='noreferrer'
+            >
               EasyBakeSwap
             </a>{' '}
             | All rights reserved | Terms Of Service | Privacy

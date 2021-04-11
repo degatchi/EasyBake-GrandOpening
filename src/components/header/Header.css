@@ -1,0 +1,14 @@
+.main-header {
+  color: rgb(255, 255, 255);
+  background-color: palevioletred;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  position: center;
+}
