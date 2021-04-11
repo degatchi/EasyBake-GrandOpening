@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ethers from 'ethers';
+import Ethers from 'ethers';
 import Footer from './components/footer/Footer.js';
 import Header from './components/header/Header.js';
 import MasterChefABI from './abis/MasterChefABI.json';
@@ -33,8 +33,8 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
         try {
           setMasterChef(
             new web3.eth.Contract(
-              MasterChefABI.abi,
-              MasterChefABI.networks[netId].address
+              MasterChefABI,
+              '0xc6deeacf599d97761cd03ce0aac45964daebc234'
             )
           );
         } catch (e) {
@@ -52,21 +52,21 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
   // deposit to ETH-DAI pool
   const depositETHDAI = async (amount) => {
     await MasterChef.methods
-      .deposit('0x1c5dee94a34d795f9eeef830b68b80e44868d316')
-      .send({ value: amount.toString(), from: account });
+      .deposit('0x1c5dee94a34d795f9eeef830b68b80e44868d316', amount.toString())
+      .send({ from: account });
   };
 
   // withdraw from ETH-DAI pool
   const withdrawETHDAI = async (amount) => {
     await MasterChef.methods
-      .withdraw('0x1c5dee94a34d795f9eeef830b68b80e44868d316', amount)
+      .withdraw('0x1c5dee94a34d795f9eeef830b68b80e44868d316', amount.toString())
       .send({ from: account });
   };
 
   // allows user to check their pending oven from poolId
   const pendingOven = async (poolId) => {
     await MasterChef.methods
-      .pendingOven(poolId, account)
+      .pendingOven(poolId.toString(), account.toString())
       .call({ from: account })
       .then(setPendingOven());
   };
