@@ -8,9 +8,10 @@ import MasterChefABI from './abis/MasterChef.json';
 import Web3 from 'web3';
 import './App.css';
 
-const App = ({ depositAmount, withdrawAmount }) => {
+const App = ({ depositAmount, withdrawAmount, poolId }) => {
   const [web3, setWeb3] = useState(undefined);
   const [account, setAccount] = useState(undefined);
+  const [_pendingOven, setPendingOven] = useState(undefined);
   const [balance, setBalance] = useState(undefined);
   // const [ovenContract, setOvenContract] = useState(undefined);
   // const [sugarBarContract, setSugarBarContract] = useState(undefined);
@@ -39,23 +40,25 @@ const App = ({ depositAmount, withdrawAmount }) => {
           // setOvenContract(
           //   new web3.eth.Contract(
           //     OvenTokenABI,
-          //     OvenTokenABI.networks[netId].address.toString()
+          //     OvenTokenABI.networks[netId].address
           //   )
           // );
           // setSugarBarContract(
           //   new web3.eth.Contract(
           //     SugarBarABI,
-          //     SugarBarABI.networks[netId].address.toString()
+          //     SugarBarABI.networks[netId].address
           //   )
           // );
           setMasterChefContract(
             new web3.eth.Contract(
               MasterChefABI,
-              SugarBarABI.networks[netId].address.toString()
+              MasterChefABI.networks[netId].address
             )
           );
         } catch (e) {
-          window.alert('Contracts not deployed to the current network');
+          window.alert(
+            `Contracts not deployed to the current network: ${netId}`
+          );
         }
       } else {
         window.alert('Please install Metamask');
@@ -78,12 +81,20 @@ const App = ({ depositAmount, withdrawAmount }) => {
       .send({ from: account });
   };
 
+  // allows user to check their pending oven from poolId
+  const pendingOven = async (poolId) => {
+    await masterChefContract.methods
+      .pendingOven(poolId, account)
+      .call({ from: account })
+      .then(setPendingOven());
+  };
+
   return (
     <div className='page-container'>
       <div className='content-wrap'>
         <Header />
-        <h1>Welcome to EasyBake, {account}</h1>
-        <h2>Current ether balance: {balance}</h2>
+        <h3>Welcome to EasyBake, {account}</h3>
+        <h4>Current ether balance: {balance}</h4>
         <hr />
         <p> Please enter amount to deposit to ETH-DAI pool: </p>
         <form
@@ -94,13 +105,11 @@ const App = ({ depositAmount, withdrawAmount }) => {
             depositETHDAI(amount);
           }}
         >
-          <div className='form-group mr-sm-2'>
-            <br />
+          <div className='form-group'>
             <input
               id='depositAmount'
               step='0.01' // amount to change per click
               type='number'
-              className='form-control form-control-md'
               placeholder='amount to deposit...'
               required
               ref={(input) => {
@@ -113,22 +122,42 @@ const App = ({ depositAmount, withdrawAmount }) => {
         <form
           onSubmit={(e) => {
             e.preventDefault(); // prevents page refresh
-            let amount = withdrawAmount.value;
+            let amount = withdrawAmount.value; // uses input from `ref`
             amount = amount * 10 ** 18; // convert to wei
-            withdrawETHDAI(amount);
+            withdrawETHDAI(amount); // call function with converted amount
           }}
         >
-          <div className='form-group mr-sm-2'>
-            <br />
+          <div className='form-group'>
             <input
               id='withdrawAmount'
               step='0.01'
               type='number'
-              className='form-control form-control-md'
               placeholder='amount to withdraw...'
               required
+              // stores user input & sends to onSubmit form
               ref={(input) => {
                 withdrawAmount = input;
+              }}
+            />
+          </div>
+        </form>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault(); // prevents page refresh
+            pendingOven(poolId);
+          }}
+        >
+          <p>
+            Your pending Oven for pool Id {poolId} is: {_pendingOven}
+          </p>
+          <div className='form-group'>
+            <input
+              id='pool Id'
+              type='string'
+              placeholder='pool Id to query...'
+              required
+              ref={(input) => {
+                poolId = input;
               }}
             />
           </div>
