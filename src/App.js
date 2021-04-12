@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Ethers from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import Footer from './components/footer/Footer.js';
 import Header from './components/header/Header.js';
 import MasterChefABI from './abis/MasterChefABI.json';
+import ETH_DAI_ABI from './abis/ETH_DAI.json';
 import Web3 from 'web3';
 import './App.css';
 
@@ -11,6 +12,7 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
   const [_pendingOven, setPendingOven] = useState(undefined);
   const [balance, setBalance] = useState(undefined);
   const [MasterChef, setMasterChef] = useState(undefined);
+  // const [EthDaiPool, setEthDaiPool] = useState(undefined);
 
   useEffect(() => {
     const init = async () => {
@@ -37,38 +39,45 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
               '0xc6deeacf599d97761cd03ce0aac45964daebc234'
             )
           );
+          // setEthDaiPool(
+          //   new web3.eth.Contract(
+          //     ETH_DAI_ABI,
+          //     '0x1c5DEe94a34D795f9EEeF830B68B80e44868d316'
+          //   )
+          // );
         } catch (e) {
           window.alert(
             `Contracts not deployed to the current network: ${netId}`
           );
         }
       } else {
-        window.alert('Please install Metamask');
+        window.alert('Unable to detect MetaMask, please install');
       }
     };
     init();
   }, []);
 
+  // // approve deposit to ETH-DAI pool
+  // const approveETHDAI = async (amount) => {
+  //   await EthDaiPool.methods.approve
+  // }
+
   // deposit to ETH-DAI pool
   const depositETHDAI = async (amount) => {
-    await MasterChef.methods
-      .deposit('2', amount.toString())
-      .send({ from: account });
+    await MasterChef.methods.deposit('2', amount).send({ from: account });
   };
 
   // withdraw from ETH-DAI pool
   const withdrawETHDAI = async (amount) => {
-    await MasterChef.methods
-      .withdraw('2', amount.toString())
-      .send({ from: account });
+    await MasterChef.methods.withdraw('2', amount).send({ from: account });
   };
 
   // allows user to check their pending oven from poolId
   const pendingOven = async (poolId) => {
-    await MasterChef.methods
-      .pendingOven(poolId.toString(), account.toString())
-      .call({ from: account })
-      .then(setPendingOven());
+    let result = await MasterChef.methods
+      .pendingOven(poolId, account)
+      .call({ from: account });
+    setPendingOven(result);
   };
 
   return (
@@ -79,7 +88,8 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
           <strong>Welcome to EasyBake,</strong> <em>{account}</em>
         </h3>
         <h4>
-          <strong>Your current Ether balance is,</strong> <em>{balance}</em>
+          <strong>Your current Ether balance is,</strong>{' '}
+          <em>{balance / 10 ** 18}</em>
         </h4>
         <hr />
         <p> Please enter amount to deposit to ETH-DAI pool: </p>
@@ -87,7 +97,7 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
           onSubmit={(e) => {
             e.preventDefault(); // prevents page refresh
             let amount = depositAmount.value;
-            amount = amount * 10 ** 18; // convert to wei
+            amount = (amount * 10 ** 18).toString(); // convert to wei
             depositETHDAI(amount);
           }}
         >
@@ -136,7 +146,8 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
           }}
         >
           <p>
-            Your pending Oven for pool Id {poolId} is: {_pendingOven}
+            Your pending Oven for pool Id <em>{poolId}</em> is:
+            <em>{_pendingOven / 10 ** 18}</em>
           </p>
           <div className='form-group'>
             <input
