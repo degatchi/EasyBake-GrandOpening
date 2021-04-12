@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { BigNumber, ethers } from 'ethers';
+// import { BigNumber, ethers } from 'ethers';
 import Footer from './components/footer/Footer.js';
 import Header from './components/header/Header.js';
 import MasterChefABI from './abis/MasterChefABI.json';
-import ETH_DAI_ABI from './abis/ETH_DAI.json';
+// import ETH_DAI_ABI from './abis/ETH_DAI.json';
 import Web3 from 'web3';
 import './App.css';
 
@@ -74,10 +74,10 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
 
   // allows user to check their pending oven from poolId
   const pendingOven = async (poolId) => {
-    let result = await MasterChef.methods
+    await MasterChef.methods
       .pendingOven(poolId, account)
-      .call({ from: account });
-    setPendingOven(result);
+      .call({ from: account })
+      .then(setPendingOven(this));
   };
 
   return (
@@ -96,8 +96,7 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
         <form
           onSubmit={(e) => {
             e.preventDefault(); // prevents page refresh
-            let amount = depositAmount.value;
-            amount = (amount * 10 ** 18).toString(); // convert to wei
+            const amount = (depositAmount.value * 10 ** 18).toString();
             depositETHDAI(amount);
           }}
         >
@@ -119,8 +118,7 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
         <form
           onSubmit={(e) => {
             e.preventDefault(); // prevents page refresh
-            let amount = withdrawAmount.value; // uses input from `ref`
-            amount = amount * 10 ** 18; // convert to wei
+            const amount = (withdrawAmount.value * 10 ** 18).toString(); // uses input from `ref` & converts to wei
             withdrawETHDAI(amount); // call function with converted amount
           }}
         >
@@ -146,13 +144,13 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
           }}
         >
           <p>
-            Your pending Oven for pool Id <em>{poolId}</em> is:
+            Your pending Oven for pool Id <em>{poolId}</em> is:{' '}
             <em>{_pendingOven / 10 ** 18}</em>
           </p>
           <div className='form-group'>
             <input
               id='poolId'
-              type='text'
+              type='number'
               placeholder='pool Id to query...'
               required
               ref={(input) => {
