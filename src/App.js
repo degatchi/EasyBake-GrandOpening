@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import detectEthereumProvider from '@metamask/detect-provider';
+// import detectEthereumProvider from '@metamask/detect-provider';
 import Web3 from 'web3';
 
 import Footer from './components/footer/Footer.js';
@@ -10,7 +10,6 @@ import EthDaiABI from './abis/EthDaiABI.json';
 import './App.css';
 
 const App = ({ depositAmount, withdrawAmount, poolId }) => {
-  const [connected, setConnection] = useState(false);
   const [account, setAccount] = useState(undefined);
   const [_pendingOven, setPendingOven] = useState(undefined);
   const [balance, setBalance] = useState(undefined);
@@ -20,7 +19,6 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
   useEffect(() => {
     const init = async () => {
       if (typeof window.ethereum !== 'undefined') {
-        setConnection(true);
         let web3 = new Web3(Web3.givenProvider || 'ws://localhost:8545');
         const netId = await web3.eth.net.getId();
         const accounts = await web3.eth.getAccounts();
@@ -60,16 +58,28 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
     init();
   }, []);
 
+  // const allowanceETHDAI = async () => {
+  //   const allowance = await EthDaiLPT.methods
+  //     .allowance(MasterChef, account)
+  //     .call();
+  // };
+
+  // [ ] Need to fix
+  const pendingOven = async (pId) => {
+    try {
+      const returnValue = await MasterChef.methods
+        .pendingOven(pId, account)
+        .call();
+      setPendingOven(returnValue);
+    } catch (err) {
+      window.alert(err);
+    }
+  };
+
   const approveETHDAI = async (amount) => {
     await EthDaiLPT.methods
       .approve('0xc6deeacf599d97761cd03ce0aac45964daebc234', amount)
       .send({ from: account });
-  };
-
-  const allowanceETHDAI = async () => {
-    const allowance = await EthDaiLPT.methods
-      .allowance(MasterChef, account)
-      .call();
   };
 
   const depositETHDAI = async (amount) => {
@@ -80,18 +90,6 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
 
   const withdrawETHDAI = async (amount) => {
     await MasterChef.methods.withdraw('2', amount).send({ from: account });
-  };
-
-  // [ ] Need to fix
-  const pendingOven = async (poolId) => {
-    try {
-      const returnValue = await MasterChef.methods
-        .pendingOven(poolId.toString(), account)
-        .call();
-      setPendingOven(returnValue);
-    } catch (err) {
-      window.alert(err);
-    }
   };
 
   // [ ] Need to fix button to pop-up metamask
@@ -162,11 +160,11 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            pendingOven(poolId);
+            pendingOven(poolId.value);
           }}
         >
           <p>
-            Your pending Oven for pool Id <em>{poolId}</em> is:{' '}
+            Your pending Oven for the provided pool Id is:{' '}
             <em>{_pendingOven / 10 ** 18}</em>
           </p>
           <div className='form-group'>
