@@ -2,14 +2,11 @@ import React, { useEffect, useState } from 'react';
 // import { BigNumber, ethers } from 'ethers';
 import Footer from './components/footer/Footer.js';
 import Header from './components/header/Header.js';
-import MasterChefABI from './abis/MasterChefABI.json';
-import Web3 from 'web3';
+import getBlockchain from './components/blockchain/getBlockchain.js';
 // import Web3Modal from 'web3modal';
 import './App.css';
 
 const App = ({ depositAmount, withdrawAmount, poolId }) => {
-  const [web3, setWeb3] = useState(undefined);
-  const [netId, setNetId] = useState(undefined);
   const [account, setAccount] = useState(undefined);
   const [_pendingOven, setPendingOven] = useState(undefined);
   const [balance, setBalance] = useState(undefined);
@@ -17,37 +14,7 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
 
   useEffect(() => {
     const init = async () => {
-      if (typeof window.ethereum !== 'undefined') {
-        setWeb3(new Web3(Web3.givenProvider || 'ws://localhost:8545'));
-        setNetId(await web3.eth.net.getId());
-        const accounts = await web3.eth.getAccounts();
-
-        // load balance
-        if (typeof accounts[0] !== 'undefined') {
-          const balance = await web3.eth.getBalance(accounts[0]);
-          setAccount(accounts[0]);
-          setBalance(balance);
-          setWeb3(new Web3(Web3.givenProvider || 'ws://localhost:8545'));
-        } else {
-          window.alert('Please login with Metamask');
-        }
-
-        // sets contract(s)
-        try {
-          setMasterChef(
-            new web3.eth.Contract(
-              MasterChefABI,
-              '0xc6deeacf599d97761cd03ce0aac45964daebc234'
-            )
-          );
-        } catch (e) {
-          window.alert(
-            `Contracts not deployed to the current network: ${netId}`
-          );
-        }
-      } else {
-        window.alert('Unable to detect MetaMask, please install');
-      }
+      getBlockchain();
     };
     init();
   });
@@ -62,12 +29,16 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
 
   // [ ] Need to fix
   const pendingOven = async (poolId) => {
-    await MasterChef.methods
-      .pendingOven(poolId, account)
-      .call()
-      .on('confirmation', function (receipt) {
-        setPendingOven(receipt);
-      });
+    try {
+      await MasterChef.methods
+        .pendingOven(poolId, account)
+        .call()
+        .on('confirmation', function (receipt) {
+          setPendingOven(receipt);
+        });
+    } catch (err) {
+      window.alert(err);
+    }
   };
 
   // [ ] Need to fix button to pop-up metamask
@@ -76,7 +47,7 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
       <div className='content-wrap'>
         <Header />
         <br />
-        {/* <button type='submit' onClick={connect()}>
+        {/* <button type='submit' onClick={window.ethereum.enable()}>
           Connect Wallet
         </button> */}
         <hr />
