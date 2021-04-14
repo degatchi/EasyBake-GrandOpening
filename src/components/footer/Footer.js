@@ -17,11 +17,11 @@ const Footer = () => {
             <h4>Socials</h4>
             <ui className='list-unstyled'>
               <a
-                href='https://twitter.com/EasyBakeSwap'
+                href='https://twitter.com/EasyBakeFinance'
                 target='_blank'
                 rel='noreferrer'
               >
-                Twitter
+                <i class='fab fa-twitter-square' /> Twitter
               </a>
               <br />
               <a
@@ -29,7 +29,7 @@ const Footer = () => {
                 target='_blank'
                 rel='noreferrer'
               >
-                Telegram
+                <i class='fab fa-telegram' /> Telegram
               </a>
               <br />
               <a
@@ -37,7 +37,7 @@ const Footer = () => {
                 target='_blank'
                 rel='noreferrer'
               >
-                Github
+                <i class='fab fa-github' /> Github
               </a>
             </ui>
           </div>
@@ -46,7 +46,7 @@ const Footer = () => {
             <h4>Contract Addresses</h4>
             <ui className='list-unstyled'>
               <a
-                href='https://ropsten.etherscan.io/address/0x1acb479bb9d1f73009f85ef5f495e942bb57f15a'
+                href='https://ropsten.etherscan.io/address/0x1acb479bb9d1f73009f85ef5f495e942bb57f15a#code'
                 target='_blank'
                 rel='noreferrer'
               >

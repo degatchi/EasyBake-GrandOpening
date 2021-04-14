@@ -1,0 +1,103 @@
+.field-deposit {
+  margin: 0;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -25%);
+  background: palevioletred;
+  height: 50px;
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  transition: all 0.5s ease;
+}
+
+.field-finish {
+  margin: 0;
+  position: relative;
+  top: -37px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: palevioletred;
+  height: 50px;
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  transition: all 0.5s ease;
+}
+
+.field-finish-text {
+  color: white;
+  top: 20%;
+  position: relative;
+}
+
+.field-deposit i {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.field-finish i {
+  padding: 10px;
+}
+
+.field-deposit input {
+  background: palevioletred;
+  text-align: center;
+  border: none;
+  flex: 1;
+  height: 100%;
+  outline: none;
+  color: white;
+  position: relative;
+}
+
+/* When you click on input, placeholder is hidden */
+.field-deposit input:focus::placeholder {
+  color: transparent;
+}
+
+.field-deposit ::placeholder {
+  color: white;
+}
+
+/* Icon Colour */
+.fas {
+  color: white;
+}
+
+/* Fade Animation */
+div.inactive {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -65%);
+}
+
+div.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%, -25%);
+}
+
+/* Shake Animation */
+@keyframes shake {
+  20% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  40% {
+    transform: translate(-50%, -50%) rotate(1deg);
+  }
+  60% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  80% {
+    transform: translate(-50%, -50%) rotate(-1deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}

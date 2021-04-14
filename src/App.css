@@ -8,6 +8,8 @@
   min-height: 100vh;
   text-align: center;
   font-family: 'Raleway', sans-serif;
+  background-color: rgb(255, 198, 233);
+  transition: background 0.5s ease;
 }
 .content-wrap {
   flex: 1;
