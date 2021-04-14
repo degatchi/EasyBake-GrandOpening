@@ -4,12 +4,13 @@ import Web3 from 'web3';
 
 import Footer from './components/footer/Footer.js';
 import Header from './components/header/Header.js';
+import { DepositForm } from './components/form/DepositForm';
 import MasterChefABI from './abis/MasterChefABI.json';
 import EthDaiABI from './abis/EthDaiABI.json';
 
 import './App.css';
 
-const App = ({ depositAmount, withdrawAmount, poolId }) => {
+const App = ({ withdrawAmount, poolId }) => {
   const [account, setAccount] = useState(undefined);
   const [_pendingOven, setPendingOven] = useState(undefined);
   const [balance, setBalance] = useState(undefined);
@@ -84,7 +85,6 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
 
   const depositETHDAI = async (amount) => {
     await approveETHDAI(amount);
-    // window.ethereum.enable();
     await MasterChef.methods.deposit('2', amount).send({ from: account });
   };
 
@@ -97,10 +97,14 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
     <div className='page-container'>
       <div className='content-wrap'>
         <Header />
-        <br />
-        {/* <button type='submit' onClick={connect()}>
-          Connect Wallet
-        </button> */}
+        <hr />
+        <a
+          href='https://swap.easybake.finance/#/add/ETH/0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa'
+          target='_blank'
+          rel='noreferrer'
+        >
+          Provide liquidity to ETH/DAI pool
+        </a>
         <hr />
         <h3>
           <strong>Welcome to EasyBake,</strong> <em>{account}</em>
@@ -111,26 +115,7 @@ const App = ({ depositAmount, withdrawAmount, poolId }) => {
         </h4>
         <hr />
         <p> Please enter amount to deposit to ETH-DAI pool: </p>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault(); // prevents page refresh
-            const amount = (depositAmount.value * 10 ** 18).toString();
-            depositETHDAI(amount);
-          }}
-        >
-          <div className='form-group'>
-            <input
-              id='depositAmount'
-              step='0.01' // amount to change per click
-              type='number'
-              placeholder='amount to deposit...'
-              required
-              ref={(input) => {
-                depositAmount = input;
-              }}
-            />
-          </div>
-        </form>
+        <DepositForm />
         <br />
         <p> Please enter amount to withdraw from ETH-DAI pool: </p>
         <form
